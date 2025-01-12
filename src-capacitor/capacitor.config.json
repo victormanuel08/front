@@ -1,0 +1,7 @@
+{
+  "appId": "org.capacitor.quasar.app",
+  "appName": "Control de Materiales",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "mi-negocio",
+  "version": "0.0.1",
+  "description": "Control de Materiales",
+  "author": "victor.gualdron.r@gmail.com",
+  "private": true,
+  "scripts": {
+    "add:android": "capacitor platform add android",
+    "dev:android": "quasar dev -m capacitor -T android",
+    "build:android": "quasar build -m capacitor -T android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^2.5.0",
+    "@capacitor/cli": "^2.0.0",
+    "@capacitor/core": "^2.0.0"
+  }
+}

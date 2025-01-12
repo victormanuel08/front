@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "SSH FS - flame",
+			"uri": "ssh://flame/home/u475801716/public_html/api"
+		}
+	],
+	"settings": {
+		"vetur.validation.template": false,
+		"vetur.format.enable": false,
+		"vetur.experimental.templateInterpolationService": false
+	}
+}

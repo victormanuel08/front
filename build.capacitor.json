@@ -1,0 +1,18 @@
+{
+  "android": {
+    "debug": {
+      "keystore": "../directorio-debug-key.jks",
+      "storePassword": "*********",
+      "alias": "directorio-debug",
+      "password": "*********",
+      "keystoreType": "jks"
+    },
+    "release": {
+      "keystore": "../directorio-release-key.jks",
+      "storePassword": "*********",
+      "alias": "directorio-release",
+      "password": "*********",
+      "keystoreType": "jks"
+    }
+  }
+}

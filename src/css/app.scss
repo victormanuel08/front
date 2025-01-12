@@ -1,0 +1,5 @@
+// app global css in SCSS form
+.no-shadow > .q-btn__wrapper:before {
+    box-shadow: none;
+    border: none;
+}
