@@ -11,19 +11,25 @@
         <q-card-section style="max-height: 70vh" class="scroll">
           <q-form @submit="onSubmit" class="q-gutter-md">
             <q-input outlined label="Fecha de Cargue *" v-model="production.date" :rules="rules.date" />
-            <q-input outlined label="Fecha de Descargue *" v-model="production.date_download" :rules="rules.date_download" />
-            <q-select outlined label="Horno *" v-model="production.oven" :options="ovens" option-label="name" option-value="id" :rules="rules.oven" />
+            <q-input outlined label="Fecha de Descargue *" v-model="production.date_download"
+              :rules="rules.date_download" />
+            <q-select outlined label="Horno *" v-model="production.oven" :options="ovens" option-label="name"
+              option-value="id" :rules="rules.oven" />
             <q-input outlined label="Eficiencia *" v-model="production.performance" :rules="rules.performance" />
-            <q-select outlined label="Producto Inicial *" v-model="production.starting" :options="materials" option-label="name" option-value="id" :rules="rules.starting" />
-            <q-select outlined label="Producto Medio" v-model="production.medium" :options="materials" option-label="name" option-value="id" />
-            <q-select outlined label="Producto Final *" v-model="production.finished" :options="materials" option-label="name" option-value="id" :rules="rules.finished" />
+            <q-select outlined label="Producto Inicial *" v-model="production.starting" :options="materials"
+              option-label="name" option-value="id" :rules="rules.starting" />
+            <q-select outlined label="Producto Medio" v-model="production.medium" :options="materials"
+              option-label="name" option-value="id" />
+            <q-select outlined label="Producto Final *" v-model="production.finished" :options="materials"
+              option-label="name" option-value="id" :rules="rules.finished" />
             <q-input outlined label="Capacidad" v-model="production.capacity" />
             <q-input outlined label="Performance Ton" v-model="production.performance_ton" />
             <q-input outlined label="Horas" v-model="production.hours" />
             <q-checkbox v-model="production.finalized" label="Finalizado" />
             <q-separator />
             <div class="row text-center">
-              <q-btn label="Cancelar" type="reset" color="primary" outline class="col" v-close-popup @click="modal.show = false" />
+              <q-btn label="Cancelar" type="reset" color="primary" outline class="col" v-close-popup
+                @click="modal.show = false" />
               <q-btn label="Aceptar" type="submit" color="primary" class="col q-ml-sm" />
             </div>
           </q-form>
@@ -35,6 +41,8 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import productionTypes from '../../store/modules/production/types';
+import ovenTypes from '../../store/modules/oven/types'; // Importa ovenTypes
+import materialTypes from '../../store/modules/material/types'; // Importa materialsTypes
 import { showNotifications } from '../../helpers/showNotifications';
 import { showLoading } from '../../helpers/showLoading';
 import { validateDate } from '../../helpers/validateDate';
@@ -103,8 +111,12 @@ export default {
       updateProduction: productionTypes.actions.UPDATE_PRODUCTION,
       deleteProduction: productionTypes.actions.DELETE_PRODUCTION,
       getProduction: productionTypes.actions.GET_PRODUCTION,
-      listOvens: productionTypes.actions.LIST_OVENS,
-      listMaterials: productionTypes.actions.LIST_MATERIALS,
+    }),
+    ...mapActions(ovenTypes.PATH, { // Usa ovenTypes para las acciones de horno
+      listOvens: ovenTypes.actions.LIST_OVENS,
+    }),
+    ...mapActions(materialTypes.PATH, { // Usa materialsTypes para las acciones de materiales
+      listMaterials: materialTypes.actions.LIST_MATERIALS,
     }),
     async onSubmit() {
       showLoading('Procesando...', 'Por favor, espere', true);
@@ -127,17 +139,34 @@ export default {
       }
     },
     async showModal(id, production, type) {
-      await this.listOvens();
-      await this.listMaterials();
-      if (id !== null) {
-        await this.getProduction(id);
-        this.production = { ...this.production };
-      } else {
-        this.resetForm();
+      if (production) {
+        this.production = { ...production };
       }
-      this.modal.title = type === 'C' ? 'Agregar Producción' : (type === 'E' ? 'Editar Producción' : 'Eliminar Producción');
-      this.modal.type = type;
-      this.modal.show = true;
+      try {
+        // alert('Entrando en showModal');
+        await this.listOvens();
+        // alert('Después de listOvens');
+        await this.listMaterials({ displayAll: 1, id: '0' });
+        // alert('Después de listMaterials');
+        if (id !== null) {
+          await this.getProduction(id);
+          // alert('Después de getProduction');
+          // alert(JSON.stringify(this.production)); // Verifica el estado de this.production
+          this.production = { ...this.production };
+        } else {
+          this.resetForm();
+          // alert('Después de resetForm');
+        }
+        this.modal.title = type === 'C' ? 'Agregar Producción' : (type === 'E' ? 'Editar Producción' : 'Eliminar Producción');
+        this.modal.type = type;
+        // alert('Antes de mostrar el modal'); // Verifica el flujo antes de mostrar el modal
+        this.modal.show = true;
+        // alert('Modal configurado y mostrado');
+      } catch (error) {
+        // alert(`Error en showModal: ${error}`);
+      } finally {
+        this.$q.loading.hide(); // Cierra el indicador de carga
+      }
     },
     resetForm() {
       this.production = {

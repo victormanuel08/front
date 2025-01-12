@@ -421,7 +421,7 @@ export default {
           startDate: '%20',
           finalDate: '%20',
         }),
-        this.listMaterials({ displayAll: 0, id: (id !== null ? rate.material : 0) }),
+        this.listMaterials({ displayAll: 1, id: (id !== null ? rate.material : 0) }),
       ]);
       if (this.yardStatus === true && this.thirdStatus === true && this.materialStatus === true) {
         if (id !== null) {
